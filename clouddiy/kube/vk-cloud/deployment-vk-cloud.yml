@@ -1,0 +1,29 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: time-service-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: time-service
+  template:
+    metadata:
+      labels:
+        app: time-service
+    spec:
+      containers:
+      # перед этим надо запушить образ в private registry командой 
+      # docker image push <адрес private registry>/itmo-example-app
+        - image: <адрес private registry>/itmo-example-app:latest
+          name: itmo-example-app
+          ports:
+          - containerPort: 8080
+          resources:
+            requests:
+              cpu: "10m"
+            limits:
+              cpu: "15m"
+      imagePullSecrets:
+          - name: regcred
